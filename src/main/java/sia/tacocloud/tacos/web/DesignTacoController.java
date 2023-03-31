@@ -1,10 +1,14 @@
 package sia.tacocloud.tacos.web;
 
+import ch.qos.logback.core.spi.ErrorCodes;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import sia.tacocloud.tacos.Ingredient;
 import sia.tacocloud.tacos.Ingredient.Type;
 import sia.tacocloud.tacos.Taco;
@@ -34,6 +38,7 @@ public class DesignTacoController {
                 new Ingredient("SRCR", "Sour Cream", Type.SAUCE)
         );
 
+
         Type[] types = Ingredient.Type.values();
         for (Type type: types) {
             model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
@@ -42,6 +47,15 @@ public class DesignTacoController {
         return "design";
     }
 
+    @PostMapping("/design")
+    public String processDesign(@Valid Taco design, Errors errors){
+        if(errors.hasErrors()){
+            return "design";
+        }
+        log.info("Processing design: " + design);
+
+        return "redirect:/orders/current";
+    }
     private List<Ingredient> filterByType(List<Ingredient> ingredients, Type type) {
         return ingredients.stream().filter(x->x.getType().equals(type))
                 .collect(Collectors.toList());
