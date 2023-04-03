@@ -1,7 +1,9 @@
 package sia.tacocloud.tacos.data;
 
+import org.springframework.data.repository.CrudRepository;
+import sia.tacocloud.tacos.Ingredient;
 import sia.tacocloud.tacos.Order;
 
-public interface OrderRepository {
-    Order save(Order order);
+public interface OrderRepository extends CrudRepository<Order, String> {
+
 }

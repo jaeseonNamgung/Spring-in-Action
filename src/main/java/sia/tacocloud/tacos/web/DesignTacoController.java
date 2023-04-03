@@ -1,6 +1,5 @@
 package sia.tacocloud.tacos.web;
 
-import ch.qos.logback.core.spi.ErrorCodes;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +15,9 @@ import sia.tacocloud.tacos.Ingredient.Type;
 import sia.tacocloud.tacos.Order;
 import sia.tacocloud.tacos.Taco;
 import sia.tacocloud.tacos.data.IngredientRepository;
-import sia.tacocloud.tacos.data.JdbcIngredientRepository;
-import sia.tacocloud.tacos.data.JdbcTacoRepository;
 import sia.tacocloud.tacos.data.TacoRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +34,7 @@ public class DesignTacoController {
     public Order order(){
         return new Order();
     }
+
     @ModelAttribute(name="taco")
     public Taco taco(){
         return new Taco();
