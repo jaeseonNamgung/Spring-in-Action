@@ -10,5 +10,7 @@ spring:
     hibernate:
       ddl-auto: create
     defer-datasource-initialization: true
-
+taco:
+  orders:
+    pageSize: 10
 

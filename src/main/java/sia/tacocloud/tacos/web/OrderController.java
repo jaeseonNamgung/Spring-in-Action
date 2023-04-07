@@ -3,6 +3,9 @@ package sia.tacocloud.tacos.web;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +24,7 @@ import sia.tacocloud.tacos.data.OrderRepository;
 public class OrderController {
 
     private final OrderRepository orderRepo;
+    private final OrderProps orderProps;
 
     @GetMapping("/current")
     public String orderForm(
@@ -61,5 +65,12 @@ public class OrderController {
         orderRepo.save(order);
         sessionStatus.setComplete();
         return "redirect:/";
+    }
+
+    @GetMapping
+    public String orderForUser(@AuthenticationPrincipal User user, Model model){
+        Pageable pageable = PageRequest.of(0, orderProps.getPageSize());
+        orderRepo.findByUserOrderByPlacedAtDesc(user, pageable);
+        return "orderList";
     }
 }
