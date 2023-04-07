@@ -14,9 +14,12 @@ import sia.tacocloud.tacos.Ingredient;
 import sia.tacocloud.tacos.Ingredient.Type;
 import sia.tacocloud.tacos.Order;
 import sia.tacocloud.tacos.Taco;
+import sia.tacocloud.tacos.User;
 import sia.tacocloud.tacos.data.IngredientRepository;
 import sia.tacocloud.tacos.data.TacoRepository;
+import sia.tacocloud.tacos.data.UserRepository;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +32,7 @@ public class DesignTacoController {
 
     private final IngredientRepository ingredientRepo;
     private final TacoRepository tacoRepository;
+    private final UserRepository userRepo;
 
     @ModelAttribute(name="order")
     public Order order(){
@@ -41,7 +45,10 @@ public class DesignTacoController {
     }
 
     @GetMapping("/design")
-    public String showDesignForm(Model model){
+    public String showDesignForm(
+            Model model,
+            Principal principal
+            ){
 
         ArrayList<Ingredient> ingredients = new ArrayList<>();
         ingredientRepo.findAll().forEach(ingredients::add);
@@ -51,7 +58,9 @@ public class DesignTacoController {
         for (Type type: types) {
             model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
         }
-        model.addAttribute("taco", new Taco());
+        String username = principal.getName();
+        User user = userRepo.findByUsername(username);
+        model.addAttribute("user", user);
         return "design";
     }
 
